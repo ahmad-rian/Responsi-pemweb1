@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Produk - Toko Buah Segar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            border: 1px solid black;
+        }
+
+        header,main,footer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #333333;
+        }
+
+        header h1 {
+            color: white;
+        }
+
+        header ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            margin-left: -40px;
+            margin-top: -1px;
+            margin-bottom: 30px;
+        }
+
+        main {
+            background-color: #f0f0f0;
+        }
+
+        .items,.item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .item {
+            flex-direction: column;
+            background-color: white;
+            padding: 5px;
+            border: 2px solid #e6e6e6;
+        }
+
+        .item h2 {
+            margin: 0;
+        }
+
+        button {
+            background-color: red;
+            color: white;
+            padding: 8px 16px;
+            border: 0;
+            margin-bottom: 5px;
+        }
+
+        .keranjang {
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            align-items: start;
+            background-color: white;
+            border: 2px solid #e6e6e6;
+            padding: 20px;
+            margin: 20px;
+        }
+
+        .keranjang h1 {
+            margin-top: 0;
+        }
+
+        .beli {
+            background-color: #017afb;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Toko Buah</h1>
+        <ul>
+            <li><a href="beranda.html">Beranda</a></li>
+            <li><a href="produk.html">Produk</a></li>
+        </ul>
+    </header>
+    <main>
+        <div class="items" id="items">
+            <div class="item">
+                <img src="pisang.jpeg" width="250px" height="100px">
+                <h2>Pisang</h2>
+                <span>Harga: $300</span>
+                <span>Pisang Kuning Menawan</span>
+                <button class="beli" onclick="beliItem('Pisang', 300)">Beli Sekarang</button>
+            </div>
+            <div class="item">
+                <img src="apel.jpeg" width="250px" height="100px">
+                <h2>Apel</h2>
+                <span>Harga: $250</span>
+                <span>Apel Merah Delima</span>
+                <button class="beli" onclick="beliItem('Apel', 250)">Beli Sekarang</button>
+            </div>
+        </div>
+        <div class="keranjang">
+            <h1>Keranjang Belanja</h1>
+            <div id="keranjang-items">
+                <!-- Item yang dibeli akan ditampilkan di sini -->
+            </div>
+            <div id="total-harga">
+                <!-- Total harga akan ditampilkan di sini -->
+            </div>
+            <button class="beli" onclick="checkout()">Checkout</button>
+        </div>
+    </main>
+
+    <script>
+        var keranjangBelanja = {}; 
+
+        function beliItem(nama, harga) {
+            if (keranjangBelanja[nama]) {
+                keranjangBelanja[nama].jumlah++;
+            } else {
+                keranjangBelanja[nama] = { harga: harga, jumlah: 1 };
+            }
+            updateKeranjang();
+        }
+
+        function updateKeranjang() {
+            var keranjangItems = document.getElementById("keranjang-items");
+            keranjangItems.innerHTML = "";
+
+            var totalHarga = 0;
+
+            for (var item in keranjangBelanja) {
+                var hargaItem = keranjangBelanja[item].harga;
+                var jumlahItem = keranjangBelanja[item].jumlah;
+
+                var itemElement = document.createElement("div");
+                itemElement.innerHTML = item + " x" + jumlahItem + " - Harga $" + hargaItem * jumlahItem + " <button onclick='hapusItem(\"" + item + "\")'>Hapus dari Keranjang</button>";
+                keranjangItems.appendChild(itemElement);
+
+                totalHarga += hargaItem * jumlahItem;
+            }
+            var totalHargaElement = document.getElementById("total-harga");
+            totalHargaElement.innerHTML = "Total Harga: $" + totalHarga;
+        }
+
+        function hapusItem(nama) {
+            if (keranjangBelanja[nama].jumlah > 1) {
+                keranjangBelanja[nama].jumlah--;
+            } else {
+                delete keranjangBelanja[nama];
+            }
+            updateKeranjang();
+        }
+
+        function checkout() {
+            alert('Pesanan berhasil dicheckout');
+            keranjangBelanja = {};
+            updateKeranjang();
+        }
+    </script>
+</body>
+
+</html>
